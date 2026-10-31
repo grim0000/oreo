@@ -1,0 +1,13 @@
+# text files are stored with LF line endings; CAD, print, image and library files are binary
+* text=auto eol=lf
+*.stl binary
+*.3mf binary
+*.f3d binary
+*.step binary
+*.png binary
+*.webp binary
+*.jpg binary
+*.jpeg binary
+*.a binary
+*.bin binary
+*.tflite binary

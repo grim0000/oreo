@@ -1,0 +1,13 @@
+# build output (contains local paths)
+firmware/.pio/
+firmware/.vscode/
+**/__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+
+# Bambu Studio command-line slicer output
+result.json
+
+# Intermediate manual renders (inputs to docs/tools/manual_pages.py)
+docs/img/manual/step_*

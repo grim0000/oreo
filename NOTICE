@@ -1,0 +1,41 @@
+Oreo
+Copyright (C) 2026 Sunil J and the Oreo contributors
+
+Licenses
+--------
+- Firmware and the scripts in docs/tools/: GNU General Public License v3.0 or later
+  (LICENSE, also LICENSES/GPL-3.0-or-later.txt).
+- 3D-printed parts and CAD (hardware/): CERN Open Hardware Licence v2 - Strongly Reciprocal
+  (hardware/LICENSE, also LICENSES/CERN-OHL-S-2.0.txt).
+- Handbook (HANDBOOK.md, HANDBOOK.html), drawings and images (docs/, except docs/tools/): Creative Commons Attribution-ShareAlike 4.0
+  International (docs/LICENSE, also LICENSES/CC-BY-SA-4.0.txt).
+
+Third-party work included
+-------------------------
+Oreo grew out of the open-source Sesame robot project, released under the Apache License 2.0
+(LICENSES/Apache-2.0.txt). Oreo's walk engine (firmware/src/main.cpp), movement sequences
+(firmware/src/movement-sequences.h), web controller (firmware/controller.html) and calibration page
+(firmware/calibrate.html) started from Sesame's code and have been extensively modified for Oreo.
+The Apache-2.0 licensed parts remain available under Apache-2.0; the combined Oreo firmware is distributed
+under GPL-3.0-or-later.
+
+CAD (hardware/Oreo(sesame_remixed).f3d) started from the Sesame robot's published Fusion 360 design
+(github.com/dorianborian/sesame-robot, hardware/cad, Apache-2.0); the original orange Sesame robot is kept in
+it for comparison. Like the Sesame files, it contains reference models of bought parts - the servo, screws
+(McMaster-Carr part numbers), the S2 Mini board, the power switch, the battery and the OLED - only to show how
+they fit. They are not printed parts and stay the property of their makers; they are not covered by Oreo's
+hardware license.
+
+firmware/components/ holds third-party code under its own licenses (each folder has its LICENSE file):
+- esp32-camera, driver (ESP-IDF): Espressif Systems, Apache-2.0. esp32-camera (from github.com/espressif/esp32-camera,
+  commit dba8da9) is modified for Oreo: driver/cam_hal.c and driver/include/esp_camera.h (camera DMA buffer handling).
+- esp-nn, esp-tflite-micro: Espressif Systems / The TensorFlow Authors, Apache-2.0
+- mww_frontend (TensorFlow Lite Micro audio frontend): The TensorFlow Authors, Apache-2.0
+- esp-dl: Espressif Systems, MIT
+
+Arduino libraries fetched by PlatformIO at build time keep their own licenses: Arduino-ESP32 core (LGPL-2.1),
+Adafruit PWM Servo Driver, Adafruit SSD1306, Adafruit GFX, Adafruit VL53L0X (BSD), LovyanGFX (FreeBSD).
+
+The wiring diagram uses breadboard artwork from the Fritzing parts library
+(https://github.com/fritzing/fritzing-parts, CC-BY-SA 3.0): the PCA9685 servo board (Adafruit), the GY-521
+MPU6050 board and the 9 g servo. Those files are in docs/tools/fritzing/ and stay under CC-BY-SA 3.0.

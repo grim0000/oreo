@@ -1,0 +1,758 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Oreo handbook</title>
+<!-- generated from HANDBOOK.md by docs/tools/handbook_html.py - edit the markdown, then run the script -->
+<style>
+:root { --bg: #fbfaf7; --fg: #1d1d21; --muted: #5d5d66; --line: #e3e1da; --card: #ffffff; --code: #f1efe9;
+        --accent: #d9821e; --link: #9a5a10; color-scheme: light; }
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #16161a; --fg: #e9e8e4; --muted: #a2a1a8; --line: #2c2c33; --card: #1e1e23; --code: #26262d;
+          --accent: #f0a04b; --link: #f3b36d; color-scheme: dark; } }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--fg);
+       font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+.wrap { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 48px; max-width: 1240px; margin: 0 auto;
+        padding: 32px max(20px, env(safe-area-inset-right, 0px)) 80px max(20px, env(safe-area-inset-left, 0px)); }
+nav { position: sticky; top: 24px; align-self: start; max-height: calc(100vh - 48px); overflow: auto; font-size: 14px; }
+nav .brand { font-weight: 700; font-size: 20px; letter-spacing: .01em; margin-bottom: 4px; }
+nav .sub { color: var(--muted); font-size: 13px; margin-bottom: 18px; }
+nav ul { list-style: none; margin: 0; padding: 0; }
+nav li { margin: 2px 0; }
+nav a { display: block; padding: 4px 10px; border-left: 2px solid transparent; color: var(--muted); text-decoration: none; }
+nav a:hover { color: var(--fg); border-left-color: var(--accent); }
+nav ul ul a { padding-left: 22px; font-size: 13px; }
+main { min-width: 0; max-width: 820px; }
+h1 { font-size: 34px; line-height: 1.2; margin: 0 0 8px; text-wrap: balance; }
+h2 { font-size: 24px; margin: 56px 0 12px; padding-top: 12px; border-top: 1px solid var(--line); text-wrap: balance; }
+h3 { font-size: 18px; margin: 32px 0 8px; }
+h2, h3 { scroll-margin-top: 16px; }
+p, li { max-width: 72ch; }
+a { color: var(--link); }
+img { max-width: 100%; height: auto; display: block; margin: 16px 0; border-radius: 6px; background: #fff;
+      border: 1px solid var(--line); }
+code { font: 13.5px/1.5 ui-monospace, "Cascadia Code", Consolas, monospace; background: var(--code); padding: 1px 5px; border-radius: 4px; }
+pre { background: var(--code); padding: 14px 16px; border-radius: 8px; overflow-x: auto; }
+pre code { background: none; padding: 0; }
+.table { overflow-x: auto; margin: 16px 0; }
+table { border-collapse: collapse; font-size: 14.5px; min-width: 60%; }
+th, td { border: 1px solid var(--line); padding: 6px 10px; text-align: left; vertical-align: top; }
+th { background: var(--code); font-weight: 600; }
+blockquote { margin: 16px 0; padding: 8px 16px; border-left: 3px solid var(--accent); background: var(--card); color: var(--muted); }
+hr { border: none; border-top: 1px solid var(--line); margin: 32px 0; }
+@media (max-width: 900px) {
+  .wrap { grid-template-columns: minmax(0, 1fr); gap: 8px; padding-top: 20px; }
+  nav { position: static; max-height: none; border-bottom: 1px solid var(--line); padding-bottom: 12px; }
+  nav ul ul { display: none; }
+}
+@media print { nav { display: none; } .wrap { display: block; } img { break-inside: avoid; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav aria-label="Contents"><div class="brand">Oreo</div><div class="sub">Build handbook</div><div class="toc">
+<ul>
+<li><a href="#1-parts">1. Parts</a></li>
+<li><a href="#2-print-the-parts">2. Print the parts</a><ul>
+<li><a href="#screws">Screws</a></li>
+</ul>
+</li>
+<li><a href="#3-assembly">3. Assembly</a></li>
+<li><a href="#4-wiring">4. Wiring</a><ul>
+<li><a href="#pin-table-esp32-s3">Pin table (ESP32-S3)</a></li>
+<li><a href="#power">Power</a></li>
+<li><a href="#servos">Servos</a></li>
+</ul>
+</li>
+<li><a href="#5-flash-the-firmware">5. Flash the firmware</a><ul>
+<li><a href="#wireless-updates">Wireless updates</a></li>
+</ul>
+</li>
+<li><a href="#6-first-start">6. First start</a></li>
+<li><a href="#7-servo-mapping-and-calibration">7. Servo mapping and calibration</a><ul>
+<li><a href="#servo-mapping-httprobot-ipservomap">Servo mapping – http://&lt;robot-ip&gt;/servomap</a></li>
+<li><a href="#calibration-httprobot-ipcalibrate">Calibration – http://&lt;robot-ip&gt;/calibrate</a></li>
+</ul>
+</li>
+<li><a href="#8-the-sd-card">8. The SD card</a></li>
+<li><a href="#9-developing-oreo">9. Developing Oreo</a><ul>
+<li><a href="#the-code">The code</a></li>
+<li><a href="#things-to-know">Things to know</a></li>
+<li><a href="#useful-endpoints">Useful endpoints</a></li>
+<li><a href="#contributing">Contributing</a></li>
+</ul>
+</li>
+<li><a href="#10-troubleshooting">10. Troubleshooting</a></li>
+</ul>
+</div>
+</nav>
+<main>
+<h1 id="oreo-handbook">Oreo handbook</h1>
+<p>How to build Oreo, flash its firmware, set up its servos, and work on the code.</p>
+<p>Oreo is a small four-legged desk robot built around an ESP32-S3 camera board. It walks with eight MG90S servos,
+looks around with a pan/tilt head, shows its face on a 2" display, hears through a MEMS mic, talks through a
+small speaker, and sees with the camera plus a single-beam time-of-flight sensor.</p>
+<ol>
+<li><a href="#1-parts">Parts</a></li>
+<li><a href="#2-print-the-parts">Print the parts</a></li>
+<li><a href="#3-assembly">Assembly</a></li>
+<li><a href="#4-wiring">Wiring</a></li>
+<li><a href="#5-flash-the-firmware">Flash the firmware</a></li>
+<li><a href="#6-first-start">First start</a></li>
+<li><a href="#7-servo-mapping-and-calibration">Servo mapping and calibration</a></li>
+<li><a href="#8-the-sd-card">The SD card</a></li>
+<li><a href="#9-developing-oreo">Developing Oreo</a></li>
+<li><a href="#10-troubleshooting">Troubleshooting</a></li>
+</ol>
+<hr />
+<h2 id="1-parts">1. Parts</h2>
+<div class="table"><table>
+<thead>
+<tr>
+<th>Qty</th>
+<th>Part</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>ESP32-S3 WROOM CAM board, <strong>N16R8</strong> (16 MB flash, 8 MB PSRAM)</td>
+<td>with OV2640 camera and microSD slot (Freenove-style pinout)</td>
+</tr>
+<tr>
+<td>1</td>
+<td>2.0" IPS display, ST7789, 240×320, SPI</td>
+<td>the face</td>
+</tr>
+<tr>
+<td>1</td>
+<td>PCA9685 16-channel servo board</td>
+<td>I2C 0x40</td>
+</tr>
+<tr>
+<td>10</td>
+<td>MG90S micro servos (metal gear, 180°)</td>
+<td>8 legs + head pan + head tilt</td>
+</tr>
+<tr>
+<td>1</td>
+<td>MPU6050 (GY-521)</td>
+<td>balance / fall detection, I2C 0x68</td>
+</tr>
+<tr>
+<td>1</td>
+<td>VL53L0X (GY-530)</td>
+<td>distance sensor on the head, I2C 0x29</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0.96" OLED, SSD1306, 128×64, I2C</td>
+<td>status screen in the chest, 0x3C</td>
+</tr>
+<tr>
+<td>1</td>
+<td>MAX98357A I2S amplifier</td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td>Speaker, 8 Ω, 0.5 W, round, 40 mm</td>
+<td>fits the round opening in the head's side; the amp can give ~1.4 W at 5 V, so keep the volume moderate</td>
+</tr>
+<tr>
+<td>1</td>
+<td>INMP441 I2S MEMS microphone</td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td>TTP223 touch pad</td>
+<td>on the crown of the head</td>
+</tr>
+<tr>
+<td>1</td>
+<td>2S LiPo, 7.4 V 1000 mAh 30C (drone battery, XT30)</td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td>2S BMS, 20 A (HW-391)</td>
+<td>pads: 0V = B-, 4.2V = balance middle, 8.4V = B+, (+)/(-) = output and charging</td>
+</tr>
+<tr>
+<td>1</td>
+<td>USB-C 2S boost charger board (8.4 V, 2 A)</td>
+<td>GND pad = battery -, BAT pad = battery +; OK LED green = full, CR red = charging</td>
+</tr>
+<tr>
+<td>1</td>
+<td>XL4015 buck converter</td>
+<td>servo power, set to 5.6 V</td>
+</tr>
+<tr>
+<td>1</td>
+<td>MP1584 mini buck converter (3 A, 22×17 mm)</td>
+<td>logic power, set to 5 V; its IN/OUT pad names are printed on the back</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Rocker switch (small, ~19×13 mm)</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Resistors 100 kΩ and 10 kΩ</td>
+<td>battery voltage divider</td>
+</tr>
+<tr>
+<td>1</td>
+<td>microSD card (any size, FAT32)</td>
+<td>face sounds, wake word, memories</td>
+</tr>
+<tr>
+<td>~50</td>
+<td>M2 self-tapping screws, 4–8 mm (an assorted M2 kit is easiest) – see <em>Screws</em> below</td>
+<td>42 are used</td>
+</tr>
+<tr>
+<td>–</td>
+<td>Silicone wire (22–26 AWG), Dupont jumpers, heat-shrink</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="2-print-the-parts">2. Print the parts</h2>
+<p>The easiest start: <strong><code>hardware/Oreo_all_parts.3mf</code></strong> – all 22 printed parts, laid out for a 256 × 256 mm bed
+(Bambu Lab A1 / P1 / X1) on four named plates: <strong>1 Body</strong>, <strong>2 Legs</strong>, <strong>3 Head</strong>, <strong>4 Neck</strong>. Each part already lies on
+the side that needs the least support. Other slicers open it too (as one plate – use <em>Arrange</em>).</p>
+<p>The same parts are in <code>hardware/assembly_parts/</code> as STL files, one per part, <strong>in their assembled position</strong> (so they
+also line up when you open them all together). Before slicing those, lay each one on its flattest face.</p>
+<p>The full CAD is <strong><code>hardware/Oreo(sesame_remixed).f3d</code></strong> – open it in Autodesk Fusion (File → Open → Open from my
+computer) to change a part. It also holds the original Sesame robot (the orange one) for comparison, and a second
+copy of the head lying where it was modelled – the head's sketches sit on that copy.
+PLA or PETG, 0.2 mm layers, 3 walls, 15–20 % infill. The servos press into their pockets and the shells clip on.</p>
+<div class="table"><table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Middle block (chassis), chassis trim</td>
+<td>1 each</td>
+</tr>
+<tr>
+<td>Top shell</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Bottom cover</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Femur</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Foot</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Neck base, pan bracket, tilt plate</td>
+<td>1 each</td>
+</tr>
+<tr>
+<td>Head shell, front plate, bezel, side plate</td>
+<td>1 each</td>
+</tr>
+<tr>
+<td>Chest strips (left, right) and back plate – black, 1 mm, glued on the top shell like the head's strips</td>
+<td>1 each</td>
+</tr>
+</tbody>
+</table></div>
+<p>The <code>*_servo</code> files are the servos themselves (the 9 g size: MG90S / SG90), there for reference – don't print them.</p>
+<p><img loading="lazy" alt="Oreo, assembled" src="docs/img/cad_oreo_iso_front.png" /></p>
+<h3 id="screws">Screws</h3>
+<p>Every screw is <strong>M2 self-tapping</strong> (pan or flat head, Phillips): the printed parts have ~1.5 mm pilot holes for the
+thread to bite into and ~2.3 mm clearance holes in the part on top. Counted from the CAD:</p>
+<div class="table"><table>
+<thead>
+<tr>
+<th>Where</th>
+<th>Screws</th>
+<th>Length</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hip servos into the middle block (2 ears each)</td>
+<td>8</td>
+<td>M2 × 8</td>
+</tr>
+<tr>
+<td>Knee servos into the femurs (2 ears each)</td>
+<td>8</td>
+<td>M2 × 8</td>
+</tr>
+<tr>
+<td>Feet onto the knee servos</td>
+<td>8</td>
+<td>M2 × 6</td>
+</tr>
+<tr>
+<td>Head front plate onto the head shell</td>
+<td>6</td>
+<td>M2 × 6</td>
+</tr>
+<tr>
+<td>Bottom cover onto the middle block</td>
+<td>4</td>
+<td>M2 × 8</td>
+</tr>
+<tr>
+<td>Top shell onto the middle block</td>
+<td>4</td>
+<td>M2 × 4</td>
+</tr>
+<tr>
+<td>Tilt servo into the neck's top plate (its 2 ears)</td>
+<td>2</td>
+<td>M2 × 5</td>
+</tr>
+<tr>
+<td>The two neck arms' feet, together</td>
+<td>2</td>
+<td>M2 × 5</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>42</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>Each servo also comes with a small screw that holds its horn on the shaft – use those (10). Don't overtighten the
+self-tapping screws: the thread is cut into plastic and strips if forced.</p>
+<h2 id="3-assembly">3. Assembly</h2>
+<p>Do the wiring (section 4) as you go: it is much easier to solder the power boards before they go into the chest.
+<strong>Don't screw the servo horns on tight until the servos are calibrated (section 7)</strong>.</p>
+<p><img loading="lazy" alt="Step 1" src="docs/img/manual/page_1.png" />
+<img loading="lazy" alt="Step 2" src="docs/img/manual/page_2.png" />
+<img loading="lazy" alt="Step 3" src="docs/img/manual/page_3.png" />
+<img loading="lazy" alt="Step 4" src="docs/img/manual/page_4.png" />
+<img loading="lazy" alt="Step 5" src="docs/img/manual/page_5.png" />
+<img loading="lazy" alt="Step 6" src="docs/img/manual/page_6.png" />
+<img loading="lazy" alt="Step 7" src="docs/img/manual/page_7.png" />
+<img loading="lazy" alt="Step 8" src="docs/img/manual/page_8.png" />
+<img loading="lazy" alt="Step 9" src="docs/img/manual/page_9.png" />
+<img loading="lazy" alt="Step 10" src="docs/img/manual/page_10.png" />
+<img loading="lazy" alt="Step 11" src="docs/img/manual/page_11.png" /></p>
+<p>Where things sit (left/right as the robot sees it, its face is the front):</p>
+<ul>
+<li><strong>Chest, under the deck:</strong> the battery, in the bay of the middle block, closed by the bottom cover.</li>
+<li><strong>Chest, on the deck:</strong> right side – the USB-C charger at the back (its port in the slot of the back wall) and the
+  green HW-391 BMS in front of it; left side – the PCA9685 at the back and the MP1584 5 V buck in front of it.</li>
+<li><strong>Chest, under the roof:</strong> the XL4015 flat in the middle, the MPU6050 beside it (mount it flat and square – it is
+  the robot's sense of level), the mini rocker switch in the window of the back slope, the OLED behind the window of
+  the front face. The round hole in the roof behind the neck is the cable way to the head.</li>
+<li><strong>Head:</strong> the head is a front body (face, side walls, floor) closed by an L-shaped back cover (back + roof).
+  The display sits landscape in the face; the camera looks out of the forehead hole with the ToF sensor on its
+  left and the mic on its right. The ESP32-S3 board stands upright right behind the display, its two USB-C ports
+  down through the slots in the floor and its top edge in the slot under the roof. The speaker fits the round
+  opening in the left wall, the MAX98357A amp the pocket in the right wall, the touch pad under the roof.</li>
+</ul>
+<h2 id="4-wiring">4. Wiring</h2>
+<p><img loading="lazy" alt="Wiring" src="docs/img/wiring.png" /></p>
+<p>(<a href="docs/img/wiring.svg">SVG version</a> – zoom in as far as you like.)</p>
+<h3 id="pin-table-esp32-s3">Pin table (ESP32-S3)</h3>
+<div class="table"><table>
+<thead>
+<tr>
+<th>GPIO</th>
+<th>Goes to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>I2C SDA – PCA9685, MPU6050, VL53L0X, OLED</td>
+</tr>
+<tr>
+<td>2</td>
+<td>I2C SCL – same four</td>
+</tr>
+<tr>
+<td>3</td>
+<td>battery sense: middle of the 100 k / 10 k divider (switched pack + → 100 k → GPIO3 → 10 k → GND)</td>
+</tr>
+<tr>
+<td>14</td>
+<td>display EN (backlight) <strong>and</strong> display RST, joined</td>
+</tr>
+<tr>
+<td>19</td>
+<td>TTP223 I/O</td>
+</tr>
+<tr>
+<td>20</td>
+<td>display DC</td>
+</tr>
+<tr>
+<td>21</td>
+<td>display CS</td>
+</tr>
+<tr>
+<td>41</td>
+<td>display SDA (MOSI)</td>
+</tr>
+<tr>
+<td>42</td>
+<td>display SCL (SCLK)</td>
+</tr>
+<tr>
+<td>45</td>
+<td>I2S bit clock – amp BCLK and mic SCK</td>
+</tr>
+<tr>
+<td>46</td>
+<td>I2S word select – amp LRC and mic WS</td>
+</tr>
+<tr>
+<td>47</td>
+<td>mic SD (data in)</td>
+</tr>
+<tr>
+<td>48</td>
+<td>amp DIN (data out)</td>
+</tr>
+<tr>
+<td>camera</td>
+<td>fixed on the board: XCLK 15, SIOD 4, SIOC 5, D0–D7 11 9 8 10 12 18 17 16, VSYNC 6, HREF 7, PCLK 13</td>
+</tr>
+<tr>
+<td>microSD</td>
+<td>fixed on the board (SD_MMC 1-bit: CLK 39, CMD 38, D0 40)</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="power">Power</h3>
+<pre><code>2S LiPo ── BMS (0V, 4.2V, 8.4V) ── BMS (+)/(-) ── USB-C charger (charges through the BMS)
+                                 │
+                            rocker switch
+                                 │  VSW (7.4 V nominal, 8.4 V full)
+              ┌──────────────────┼──────────────────────┐
+         XL4015 buck        MP1584 buck (5 V)      100k/10k divider → GPIO3
+       (5.6 V, servos)      (logic: ESP32 5V pin, amp)
+              │
+       PCA9685 V+ terminal → servos
+</code></pre>
+<ul>
+<li><strong>Set the XL4015 output to 5.6 V with a multimeter before you connect the servos.</strong> 5.6 V (rather than 5 V) gives
+  the MG90S servos extra torque while staying inside their 4.8–6 V range. The battery's 7–8.4 V straight on the servos
+  will kill them.</li>
+<li>The MP1584 5 V buck feeds the ESP32-S3 board's <strong>5V pin</strong> (and the amp) through the neck cable.</li>
+<li>The ESP32's own 3.3 V regulator powers the 3V3 parts (sensors, OLED, display, mic, touch, PCA9685 logic);
+  the chest's I2C parts get their 3V3 back down the neck.</li>
+<li>The <strong>neck cable</strong> has 6 wires: 5V, battery sense (GPIO3), GND, SDA, SCL, 3V3.</li>
+<li>All grounds are joined.</li>
+<li>Keep the servo current away from the logic: the servos get the XL4015, everything else the MP1584 5 V buck.</li>
+</ul>
+<h3 id="servos">Servos</h3>
+<p>The PCA9685 channels the firmware expects out of the box:</p>
+<div class="table"><table>
+<thead>
+<tr>
+<th>Servo</th>
+<th>Channel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Front-right hip (R1)</td>
+<td>14</td>
+</tr>
+<tr>
+<td>Back-right hip (R2)</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Front-left hip (L1)</td>
+<td>12</td>
+</tr>
+<tr>
+<td>Back-left hip (L2)</td>
+<td>13</td>
+</tr>
+<tr>
+<td>Back-right knee (R4)</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Front-right knee (R3)</td>
+<td>9</td>
+</tr>
+<tr>
+<td>Front-left knee (L3)</td>
+<td>11</td>
+</tr>
+<tr>
+<td>Back-left knee (L4)</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Head pan</td>
+<td>7</td>
+</tr>
+<tr>
+<td>Head tilt</td>
+<td>5</td>
+</tr>
+</tbody>
+</table></div>
+<p>Wired them differently? That's fine – change the mapping on the robot (section 7), no code change needed.</p>
+<h2 id="5-flash-the-firmware">5. Flash the firmware</h2>
+<p>You need <a href="https://code.visualstudio.com/">VS Code</a> with the
+<a href="https://platformio.org/install/ide?install=vscode">PlatformIO extension</a> (or the <code>pio</code> command line).</p>
+<ol>
+<li>Open the <code>firmware/</code> folder in VS Code.</li>
+<li>Plug the ESP32-S3 board in with a USB-C <strong>data</strong> cable, using the port marked <strong>USB</strong> (native USB).
+   If your computer doesn't see it, hold <strong>BOOT</strong>, tap <strong>RST</strong>, release <strong>BOOT</strong>.</li>
+<li>Build and flash:</li>
+</ol>
+<p><code>pio run -e oreo -t upload</code></p>
+<p>The first build downloads the ESP-IDF and Arduino toolchains and takes around ten minutes. Later builds take
+   about a minute. (On a PC with little RAM, build with <code>pio run -e oreo -j 2</code>.)
+4. Watch the log: <code>pio device monitor</code> (115200 baud).</p>
+<p>The web pages (controller, calibration, servo mapping) are compiled into the firmware. After editing one of the
+<code>.html</code> files, run <code>python pack_html.py</code> in <code>firmware/</code> to regenerate the <code>*_html_gz.h</code> headers, then build.</p>
+<h3 id="wireless-updates">Wireless updates</h3>
+<p>Once Oreo is on your WiFi you can flash over the air:</p>
+<pre><code># Windows PowerShell
+$env:ROBOT_IP=&quot;192.168.1.50&quot;; pio run -e oreo_ota -t upload
+# macOS / Linux
+ROBOT_IP=192.168.1.50 pio run -e oreo_ota -t upload
+</code></pre>
+<p>Only flash while the robot is idle (not walking, not chatting) – the update needs the WiFi link and the memory.</p>
+<h2 id="6-first-start">6. First start</h2>
+<ol>
+<li>Put the SD card in (section 8), switch on. The face appears after about 3 seconds.</li>
+<li>On your phone, join the WiFi network <strong>Oreo</strong> (open) and browse to <strong>http://192.168.4.1</strong> (or http://oreo.local).</li>
+<li>In <strong>Settings → WiFi</strong>, pick your home network and enter its password. Oreo remembers it and joins it on every
+   start; its IP address shows on the chest OLED. The <strong>Oreo</strong> hotspot stays available as a fallback.</li>
+<li>Optional, for conversations: open the <strong>Talk</strong> panel and paste a Gemini API key
+   (free from aistudio.google.com). The key is stored only on the robot.</li>
+<li>Optional: set your city in <strong>Desk → Weather</strong>; the time zone follows the city automatically.</li>
+</ol>
+<p>The phone controller works over http. The microphone in the browser needs <strong>https</strong>: open
+<code>https://&lt;robot-ip&gt;</code> and accept the certificate warning once. Each robot makes its own certificate on its first start.</p>
+<h2 id="7-servo-mapping-and-calibration">7. Servo mapping and calibration</h2>
+<p><strong>Keep the robot off the floor (on a box or stand, legs free) while you do this.</strong></p>
+<h3 id="servo-mapping-httprobot-ipservomap">Servo mapping – <code>http://&lt;robot-ip&gt;/servomap</code></h3>
+<p>Lists the ten servo roles and the PCA9685 channel each one uses.</p>
+<ul>
+<li>Press <strong>Wiggle</strong> next to a channel: that servo moves a little. Use it to find which servo is on which channel.</li>
+<li>Pick the right channel for each role from its list – it is saved at once.
+  <strong>Reset to the reference wiring</strong> restores the defaults from the table above.</li>
+</ul>
+<h3 id="calibration-httprobot-ipcalibrate">Calibration – <code>http://&lt;robot-ip&gt;/calibrate</code></h3>
+<p>Every pose, walk and emote in the firmware is written for the reference robot's servos. Your servos sit a little
+differently (where the horn landed on the spline, small differences between servos), so you tell the firmware
+three points for each servo – <strong>Min</strong>, <strong>Mid</strong> and <strong>Max</strong> – by moving it to the poses drawn below and capturing
+the angle. The firmware then maps every move onto your three points, so your Oreo moves like the reference one.
+(Checked in a physics simulation: a robot with each horn up to one spline tooth off walks a third slower and
+drifts before calibration; after capturing the drawn poses to within ±2° it walks like the reference.)</p>
+<p>The calibration page uses the channels from the servo mapping page, so do the mapping first.</p>
+<p><strong>Hips</strong> (R1 R2 L1 L2) – Min: the leg along the body. Mid: the 45° diagonal. Max: straight out to the side.</p>
+<p><img loading="lazy" alt="Hip calibration: Min, Mid, Max" src="docs/img/calibration/cal_hips.png" /></p>
+<p><strong>Knees</strong> (R3 R4 L3 L4) – Min: the foot folded all the way up, the lower leg pointing up close beside the body.
+Mid: the foot straight down.
+Max: the foot tucked a little in under the body. A knee's Mid is <em>not</em> halfway between Min and Max: set it by eye,
+don't use <strong>Auto Mid</strong> for knees.</p>
+<p><img loading="lazy" alt="Knee calibration: Min, Mid, Max" src="docs/img/calibration/cal_knees.png" /></p>
+<p><strong>Head pan</strong> – Min: turned fully to Oreo's right. Mid: straight ahead. Max: turned fully to Oreo's left.</p>
+<p><img loading="lazy" alt="Head pan calibration: Min, Mid, Max" src="docs/img/calibration/cal_pan.png" /></p>
+<p><strong>Head tilt</strong> – Min: looking up, just before the head comes to rest on the neck arms (they stop it about 36° up).
+Mid: level. Max: looking down (stop before the head presses on the body).</p>
+<p><img loading="lazy" alt="Head tilt calibration: Min, Mid, Max" src="docs/img/calibration/cal_tilt.png" /></p>
+<p>Step by step (robot on a box, legs in the air):</p>
+<ol>
+<li>Leave the horn screws out (or loose).</li>
+<li>Press <strong>Set All Mid</strong>: every servo goes to the reference robot's Mid angle.</li>
+<li>Push each leg and the head onto its servo as close to its <strong>Mid</strong> pose as the spline allows: hips on the
+   diagonal, feet straight down, head straight ahead and level. Tighten the horn screws.</li>
+<li>For each servo: jog it with <strong>±1° / ±10°</strong> until it is exactly in the Mid pose and press <strong>Capture Mid</strong>.
+   Then jog it to the Min pose and press <strong>Capture Min</strong>, and to the Max pose and <strong>Capture Max</strong>. Go slowly near
+   the ends and stop before a part touches anything.</li>
+<li><strong>Save to robot</strong>. <strong>Export Configuration</strong> downloads a copy to keep.</li>
+</ol>
+<p>Numbers below 0 are normal: what matters is the pose, not the number. The page's angle is not the servo's own
+degree – it is a pulse width (0 = 732 µs, 180 = 2929 µs, the scale of the original Sesame calibrator). An MG90S
+answers from about <strong>-19 (500 µs) to about 150 (2560 µs)</strong>; past 150 it sits on its internal end stop and nothing
+moves. The reference robot's own values go from -18 to 150, so the knee folds and the hip ends use the servo's
+whole travel. If a joint can't reach its drawn Min or Max inside that window, take the horn off and refit it one
+spline tooth over (closer to that end), then calibrate that servo again.</p>
+<p>The calibration is stored on the robot and survives firmware updates.</p>
+<h2 id="8-the-sd-card">8. The SD card</h2>
+<p>Format it FAT32 and copy the repo's <a href="sd/sesame/"><code>sd/sesame</code></a> folder to its root (or create an empty folder named <code>sesame</code>) (the name is kept from the project Oreo grew out of).
+The robot adds its own files there (memories, chat logs, face IDs). Files you can add:</p>
+<div class="table"><table>
+<thead>
+<tr>
+<th>File</th>
+<th>What</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sesame/wake.tflite</code></td>
+<td>the "hey Oreo" wake word: copy it from <a href="sd/sesame/"><code>sd/sesame/</code></a> (see <a href="sd/README.md"><code>sd/README.md</code></a> for the cutoff and the other model); without it, voice starts from the touch pad or the app</td>
+</tr>
+<tr>
+<td><code>sesame/voices/</code></td>
+<td>short sound clips for the face's reactions</td>
+</tr>
+<tr>
+<td><code>sesame/timer.wav</code>, <code>alarm.wav</code></td>
+<td>timer and alarm sounds</td>
+</tr>
+<tr>
+<td><code>sesame/personas.txt</code></td>
+<td>personalities for the conversation</td>
+</tr>
+</tbody>
+</table></div>
+<p>Everything works without the card; you just lose those extras.</p>
+<h2 id="9-developing-oreo">9. Developing Oreo</h2>
+<h3 id="the-code">The code</h3>
+<pre><code>firmware/
+  platformio.ini        build settings (PlatformIO; Arduino as an ESP-IDF component)
+  sdkconfig.oreo        ESP-IDF settings (PSRAM, network buffers, ...)
+  partitions_ota5.csv   two 5 MB app slots for wireless updates
+  controller.html       the phone controller (packed into the firmware by pack_html.py)
+  calibrate.html        calibration page
+  servomap.html         servo mapping page
+  src/
+    main.cpp            setup, WiFi + web server, the walk engine (gaits, poses), settings, OTA
+    servo_map.h         servo roles -&gt; PCA9685 channels (saved on the robot)
+    movement-sequences.h  emotes and poses (wave, dance, sit, ...)
+    face_engine_v2.h    the face: styles, expressions, blinking, eye movement
+    face_scenes.h, face_lib.h, face_logic.h   animated scenes, the face's mood logic
+    face_id.h           face detection + recognition on the camera
+    gemini.h            voice conversations (Gemini Live over a WebSocket, straight from the robot)
+    voice_tools.h       what the robot can do when asked in a conversation (walk, look, timers, ...)
+    wakeword.h          on-device wake word (TensorFlow Lite Micro)
+    audio.h, music.h, beat.h   speaker, music playback, beat detection for dancing
+    desk_*.h            Desk mode: the robot as a desk companion (clock, weather, reactions)
+    desk_clock.h        timers, alarms, focus sessions
+    life_mode.h         autonomous &quot;living&quot; mode
+    oled_ui.h           the chest screen
+    talk.h, tls_cert.h  phone mic -&gt; robot speaker over HTTPS, the robot's own certificate
+    xlog.h              in-memory activity log (GET /log)
+</code></pre>
+<h3 id="things-to-know">Things to know</h3>
+<ul>
+<li><strong>Two cores, many tasks.</strong> The walk engine runs in the Arduino loop; the camera, face, audio, network and chat
+  each have their own FreeRTOS task. Talk between them with the existing flags/queues, not by calling into another
+  task's code.</li>
+<li><strong>Memory.</strong> Big buffers live in PSRAM (<code>heap_caps_malloc(..., MALLOC_CAP_SPIRAM)</code>). Internal RAM is tight while
+  the camera and a conversation run together – check <code>GET /status</code> (<code>heap</code>, <code>minHeap</code>) after a change.</li>
+<li><strong>I2C is shared</strong> by the servo board, IMU, ToF and OLED. Use the existing helpers; never block the bus for long.</li>
+<li><strong>Settings</strong> live in ESP32 Preferences (NVS). Most tuning values are exposed on the controller's settings page
+  (each has a name, range and help text in <code>main.cpp</code>, search for <code>PRM(</code>) – add new ones the same way.</li>
+<li><strong>Head limits.</strong> Every head move is clamped to the calibrated pan/tilt range; keep it that way, the neck parts
+  are small.</li>
+<li><strong>Web pages</strong> are gzipped into headers. Edit the <code>.html</code>, run <code>python pack_html.py</code>, build.</li>
+<li><strong>Logs.</strong> <code>GET /log</code> returns the activity log (boot, state changes, problems); the serial monitor shows more.</li>
+</ul>
+<h3 id="useful-endpoints">Useful endpoints</h3>
+<div class="table"><table>
+<thead>
+<tr>
+<th>URL</th>
+<th>What</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/</code></td>
+<td>phone controller</td>
+</tr>
+<tr>
+<td><code>/status</code></td>
+<td>JSON: battery, mode, heap, sensors</td>
+</tr>
+<tr>
+<td><code>/cmd?go=forward</code> etc.</td>
+<td>movement commands (see the controller's JavaScript for the full list)</td>
+</tr>
+<tr>
+<td><code>/servomap</code></td>
+<td>servo mapping</td>
+</tr>
+<tr>
+<td><code>/calibrate</code></td>
+<td>calibration</td>
+</tr>
+<tr>
+<td><code>/log</code></td>
+<td>activity log</td>
+</tr>
+<tr>
+<td><code>/ota</code> (POST)</td>
+<td>firmware update</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="contributing">Contributing</h3>
+<p>Keep changes small and test them on a robot that is <strong>off the floor</strong> first; only walk it on the floor once the
+servos move the way you expect. Describe in a pull request what you changed and how you tested it.</p>
+<h2 id="10-troubleshooting">10. Troubleshooting</h2>
+<div class="table"><table>
+<thead>
+<tr>
+<th>Problem</th>
+<th>Try</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Board not found when flashing</td>
+<td>Another USB-C cable (many are charge-only); BOOT + RST; use the port marked USB</td>
+</tr>
+<tr>
+<td>Restarts when the legs move</td>
+<td>Servo power and logic power must come from separate bucks; check the XL4015 output and the battery</td>
+</tr>
+<tr>
+<td>A leg moves the wrong way or the wrong leg moves</td>
+<td>Servo mapping page, then calibrate</td>
+</tr>
+<tr>
+<td>Face stays dark</td>
+<td>GPIO14 drives both the backlight (EN) and RST – check that joint</td>
+</tr>
+<tr>
+<td>Battery reading wrong</td>
+<td>Settings → Battery: enter the voltage from a multimeter, the scale is computed</td>
+</tr>
+<tr>
+<td>No voice</td>
+<td>https page for the phone mic; Gemini key in the Talk panel; robot on a WiFi with internet</td>
+</tr>
+<tr>
+<td>Wobbly walking</td>
+<td>Recalibrate with the body level; check that the MPU6050 is mounted flat</td>
+</tr>
+</tbody>
+</table></div>
+</main>
+</div>
+</body>
+</html>
