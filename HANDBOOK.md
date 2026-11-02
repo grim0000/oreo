@@ -302,6 +302,16 @@ moves. The reference robot's own values go from -18 to 150, so the knee folds an
 whole travel. If a joint can't reach its drawn Min or Max inside that window, take the horn off and refit it one
 spline tooth over (closer to that end), then calibrate that servo again.
 
+**Never capture past the point where the servo stops moving.** If you keep pressing +1° after the joint has
+stopped, the saved value lies beyond the servo's travel and the servo would push against its internal stop during
+moves (buzzing, getting warm). The firmware also never sends a leg servo past -19…150, but the pose you capture
+should be one the servo really reaches. If a joint stops a few degrees short of its drawn pose, capture it where it
+stops: every move is scaled onto your values, the emotes on that joint just come out a little smaller.
+
+(Checked in the physics simulation: all 203 emotes, on robots whose horns sit up to one spline tooth off and with a
+few degrees of error in the captured points, played without a fall. The ones that balance on three legs – victory,
+leg raise, lunges, disco – tip a little more or less from robot to robot.)
+
 The calibration is stored on the robot and survives firmware updates.
 
 ## 8. The SD card

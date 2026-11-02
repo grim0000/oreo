@@ -598,6 +598,14 @@ answers from about <strong>-19 (500 µs) to about 150 (2560 µs)</strong>; past 
 moves. The reference robot's own values go from -18 to 150, so the knee folds and the hip ends use the servo's
 whole travel. If a joint can't reach its drawn Min or Max inside that window, take the horn off and refit it one
 spline tooth over (closer to that end), then calibrate that servo again.</p>
+<p><strong>Never capture past the point where the servo stops moving.</strong> If you keep pressing +1° after the joint has
+stopped, the saved value lies beyond the servo's travel and the servo would push against its internal stop during
+moves (buzzing, getting warm). The firmware also never sends a leg servo past -19…150, but the pose you capture
+should be one the servo really reaches. If a joint stops a few degrees short of its drawn pose, capture it where it
+stops: every move is scaled onto your values, the emotes on that joint just come out a little smaller.</p>
+<p>(Checked in the physics simulation: all 203 emotes, on robots whose horns sit up to one spline tooth off and with a
+few degrees of error in the captured points, played without a fall. The ones that balance on three legs – victory,
+leg raise, lunges, disco – tip a little more or less from robot to robot.)</p>
 <p>The calibration is stored on the robot and survives firmware updates.</p>
 <h2 id="8-the-sd-card">8. The SD card</h2>
 <p>Format it FAT32 and copy the repo's <a href="sd/sesame/"><code>sd/sesame</code></a> folder to its root (or create an empty folder named <code>sesame</code>) (the name is kept from the project Oreo grew out of).

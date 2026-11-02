@@ -482,6 +482,7 @@ void legsFromServoBoard() {
                                       : lyingNow ? "limp, it last lay down: taken as lying" : "limp, it last stood: taken as standing");
 }
 
+const float SERVO_TRAVEL_LO = -19.0f, SERVO_TRAVEL_HI = 150.0f;  // MG90S (0..180 = 732..2929 us)
 void setServoAngle(uint8_t channel, int angle) {
    if (channel > 7) return;
    if (legsLyingSaved) { legsLyingSaved = false; prefPut("legsLying", 0, true); }  // moving again: not lying any more
@@ -498,7 +499,9 @@ void setServoAngle(uint8_t channel, int angle) {
 
    const int pin = mappedPins[channel];
    if (calHolding(pin)) return;  // the calibration page has it
-   const float raw = calMap(channel, angle);
+   // never past the MG90S's travel (-19..150 on this scale): a saved Min / Max beyond where the servo really
+   // stops would otherwise hold it against its internal stop (buzzing, heat)
+   const float raw = constrain(calMap(channel, angle), SERVO_TRAVEL_LO, SERVO_TRAVEL_HI);
    servoRawNow[pin] = raw;
    servoRawKnown[pin] = true;
    pwm.writeMicroseconds(pin, (uint16_t)lroundf(732 + raw * (2929 - 732) / 180.0f));
