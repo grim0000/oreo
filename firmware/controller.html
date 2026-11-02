@@ -6042,6 +6042,7 @@ function musicPanel() {
   put('drive', byTitle('Head (pan / tilt)'));
   put('drive', $('#queueStatus'));
   group('drive', 'Poses and moves', 'emote', [byTitle('Poses & Animations')], false);
+  group('drive', 'Emote library', 'emote', [byTitle('Emote Library (117)')], false);  // (it was left loose under every tab)
   group('drive', 'Walking styles', 'walk', ['Smooth Walk Controls', 'Movement Control', 'Steady Gait', 'Level-Gait', 'Balanced Walk', 'Diagonal Trot'].map(byTitle), false);
   const classic = byTitle('Movement Control');  // the old D-pad: kept, under Walking styles
   if (classic) classic.querySelector(':scope > .section-title').textContent = 'Classic D-pad';

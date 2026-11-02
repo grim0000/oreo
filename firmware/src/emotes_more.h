@@ -15,12 +15,33 @@ struct EmV4 { float v[4]; };
 #define EMV(...) EmV4{{__VA_ARGS__}}
 
 // the stand + per-leg offsets (fwd, bend; NAN = that joint unchanged) -> eased move, scaled like every emote
+// Paw guard: one front paw held up (a wave, a high five, a paw offered) tips Oreo forward onto that corner unless
+// the weight is over the other three legs first. So such a paw only goes up from the wave's tested lean
+// (waveLean), only that leg moves while it is up, and it comes down before the lean is undone. Quick taps
+// (stomps: under 200 ms) are left as they are - there's no time to tip.
+const float EMO_PAW_UP = 40;  // knee bend (deg) that counts as a raised paw
 inline void emoLegsA(int ms, EmV4 fwd, EmV4 bend) {
   int t[8];
   for (int i = 0; i < 8; i++) t[i] = -999;
   for (int l = 0; l < 4; l++) {
     if (fwd.v[l] == fwd.v[l]) t[EM_HIP[l]] = (int)lroundf(POSE_STAND[EM_HIP[l]] + EM_FWD[l] * fwd.v[l]);
     if (bend.v[l] == bend.v[l]) t[EM_KNEE[l]] = (int)lroundf(POSE_STAND[EM_KNEE[l]] + EM_BEND[l] * bend.v[l]);
+  }
+  // which front paw this step holds up (0 = front-left = the wave's side 0, 1 = front-right; NAN keeps the paw as is)
+  auto up = [&](int l, int side) { const float b = bend.v[l]; return b == b ? b > EMO_PAW_UP : emoPawSide == side; };
+  const bool fr = up(0, 1), fl = up(1, 0);
+  const int side = (fr != fl) ? (fl ? 0 : 1) : -1;
+  if (side >= 0 && (ms >= 200 || emoPawSide == side)) {
+    if (emoPawSide != side) {
+      emoPawDown();
+      waveLean(side, 350);  // the weight over the other three legs first
+      emoPawSide = side;
+    }
+    const int l = side == 0 ? 1 : 0;  // only the raised leg moves
+    for (int i = 0; i < 8; i++)
+      if (i != EM_HIP[l] && i != EM_KNEE[l]) t[i] = -999;
+  } else if (emoPawSide >= 0) {
+    emoPawDown();  // the paw down before the body moves
   }
   emoLegs(ms, t[0], t[1], t[2], t[3], t[4], t[5], t[6], t[7]);
 }

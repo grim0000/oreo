@@ -474,7 +474,17 @@ inline void emoCrouch(float k, int ms) {
 }
 
 // Head back to the middle, stand, done
+// The paw guard (emotes_more.h emoLegsA): which front paw is held up from the wave's lean (0 = front-left, as the
+// wave's side 0; 1 = front-right), -1 = none. Its foot comes down before anything else moves the body.
+int emoPawSide = -1;
+inline void emoPawDown(int ms = 250) {
+  if (emoPawSide < 0) return;
+  if (emoPawSide == 0) moveSmoothHelper(ms, -999, -999, POSE_STAND[2], -999, -999, -999, POSE_STAND[6], -999);  // L1, L3
+  else moveSmoothHelper(ms, POSE_STAND[0], -999, -999, -999, -999, POSE_STAND[5], -999, -999);                 // R1, R3
+  emoPawSide = -1;
+}
 inline void emoFinish(const char* cmd) {
+  emoPawDown();
   const int p0 = emoPanNow, t0 = emoTiltNow;
   for (int s = 1; s <= 10; s++) {
     setHeadServoAngle(EMO_PAN_PIN, p0 + (EMO_PAN_MID - p0) * s / 10);
