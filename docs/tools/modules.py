@@ -283,16 +283,21 @@ def max98357(x, y):
 
 
 def inmp441(x, y):
-    """INMP441 I2S MEMS mic, round 14 mm board, six pins."""
+    """INMP441 I2S MEMS mic, round 14 mm board with a tab on each side: SCK / WS / L/R on the left,
+    SD / VDD / GND on the right (top view, mic hole at the top)."""
     g = G(x, y)
+    for tx in (-1.9, 12.3):  # the two pin tabs
+        g.rect(tx, 3.0, 3.6, 8.0, "#1d4f96", "#123566", 0.25, 0.6)
     g.circle(7, 7, 7, "#1d4f96", "#123566", 0.3)
-    g.rect(4.8, 2.2, 4.4, 3.4, "#c9ccd2", "#8e9299", 0.2, 0.3)
-    g.circle(7, 3.9, 0.5, "#333")
-    g.text(7, 8.0, "INMP441", 1.1, "#dbe6ff", bold=False)
-    g.rect(0.65, 9.6, 12.7, 3.4, "#1d4f96")
-    for i, nm in enumerate(("SCK", "WS", "SD", "L/R", "GND", "VDD")):
-        g.pin(nm, 0.65 + 1.27 + i * 2.54, 11.6)
-        g.text(0.65 + 1.27 + i * 2.54, 15.0, nm, 0.85, "#1e2127")
+    g.rect(4.8, 1.6, 4.4, 3.2, "#c9ccd2", "#8e9299", 0.2, 0.3)
+    g.circle(7, 3.2, 0.5, "#333")
+    g.text(7, 12.0, "INMP441", 0.95, "#dbe6ff", bold=False)
+    for i, (l, r) in enumerate((("SCK", "SD"), ("WS", "VDD"), ("L/R", "GND"))):
+        yy = 4.46 + i * 2.54
+        g.pin(l, -0.1, yy)
+        g.text(1.3, yy + 0.3, l, 0.8, "#ffffff", "start")
+        g.pin(r, 14.1, yy)
+        g.text(12.7, yy + 0.3, r, 0.8, "#ffffff", "end")
     return g.done("INMP441 mic", "I2S MEMS")
 
 

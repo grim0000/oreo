@@ -123,9 +123,11 @@ def main():
     wire([s3["RGPIO19"], (820, s3["RGPIO19"][1]), (820, touch["I/O"][1]), touch["I/O"]], C["IO"])
 
     # mic: power to the right-hand rails, signals down to the I2S lanes
-    wire([mic["GND"], (mic["GND"][0], 330), (1330, 330)], C["GND"], dots=[(1330, 330)])
-    wire([mic["L/R"], (mic["L/R"][0], 330)], C["GND"], dots=[(mic["L/R"][0], 330)])
-    wire([mic["VDD"], (mic["VDD"][0], 318), (1342, 318)], C["3V3"], dots=[(1342, 318)])
+    # (pins on the mic's left tab: SCK, WS, L/R; right tab: SD, VDD, GND)
+    wire([mic["GND"], (1330, mic["GND"][1])], C["GND"], dots=[(1330, mic["GND"][1])])
+    wire([mic["VDD"], (1342, mic["VDD"][1])], C["3V3"], dots=[(1342, mic["VDD"][1])])
+    lr = mic["L/R"][0] - 12
+    wire([mic["L/R"], (lr, mic["L/R"][1]), (lr, 330), (1330, 330)], C["GND"], dots=[(1330, 330)])
     # I2S
     yl = {"GPIO45": 680, "GPIO46": 692, "GPIO47": 704, "GPIO48": 716}
     xl = {"GPIO45": 840, "GPIO46": 852, "GPIO47": 864, "GPIO48": 876}
@@ -135,11 +137,12 @@ def main():
             wire([a, (630, a[1]), (630, yl[g]), (xl[g], yl[g])], C["I2S"])
         else:
             wire([a, (xl[g], a[1]), (xl[g], yl[g])], C["I2S"])
-    wire([(xl["GPIO45"], yl["GPIO45"]), (mic["SCK"][0], yl["GPIO45"]), mic["SCK"]], C["I2S"])
+    wire([(xl["GPIO45"], yl["GPIO45"]), (lr - 24, yl["GPIO45"]), (lr - 24, mic["SCK"][1]), mic["SCK"]], C["I2S"])
     wire([(amp["BCLK"][0], yl["GPIO45"]), amp["BCLK"]], C["I2S"], dots=[(amp["BCLK"][0], yl["GPIO45"])])
-    wire([(xl["GPIO46"], yl["GPIO46"]), (mic["WS"][0], yl["GPIO46"]), mic["WS"]], C["I2S"])
+    wire([(xl["GPIO46"], yl["GPIO46"]), (lr - 12, yl["GPIO46"]), (lr - 12, mic["WS"][1]), mic["WS"]], C["I2S"])
     wire([(amp["LRC"][0], yl["GPIO46"]), amp["LRC"]], C["I2S"], dots=[(amp["LRC"][0], yl["GPIO46"])])
-    wire([(xl["GPIO47"], yl["GPIO47"]), (mic["SD"][0], yl["GPIO47"]), mic["SD"]], C["I2S"])
+    sdx = mic["SD"][0] + 12
+    wire([(xl["GPIO47"], yl["GPIO47"]), (sdx, yl["GPIO47"]), (sdx, mic["SD"][1]), mic["SD"]], C["I2S"])
     wire([(xl["GPIO48"], yl["GPIO48"]), (amp["DIN"][0], yl["GPIO48"]), amp["DIN"]], C["I2S"])
     wire([amp["GND"], (amp["GND"][0], botg)], C["GND"], dots=[(amp["GND"][0], botg)])
     # speaker on the amp's screw terminal
