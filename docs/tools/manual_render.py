@@ -68,7 +68,10 @@ def mat(tone):
 
 
 def load(name, tone=1.0):
-    bpy.ops.wm.stl_import(filepath=os.path.join(PARTS, name + ".stl"))
+    path = os.path.join(PARTS, name + ".stl")
+    if not os.path.exists(path):  # the servos (reference models, not printed) are in their own folder
+        path = os.path.join(PARTS, "servos_reference", name + ".stl")
+    bpy.ops.wm.stl_import(filepath=path)
     o = bpy.context.selected_objects[0]
     o.name = name
     o.data.materials.append(mat(tone))
@@ -465,7 +468,7 @@ def main():
     # 11 - complete
     if want("11"):
         reset()
-        names = [f[:-4] for f in os.listdir(PARTS) if f.endswith(".stl")]
+        names = [f[:-4] for d in (PARTS, os.path.join(PARTS, "servos_reference")) for f in os.listdir(d) if f.endswith(".stl")]
         allp = []
         for n in names:
             dark = any(k in n for k in ("servo", "middle_block", "neck", "bezel", "side_plate", "trim"))

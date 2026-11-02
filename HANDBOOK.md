@@ -70,7 +70,7 @@ PLA or PETG, 0.2 mm layers, 3 walls, 15–20 % infill. The servos press into the
 | Head shell, front plate, bezel, side plate | 1 each |
 | Chest strips (left, right) and back plate – black, 1 mm, glued on the top shell like the head's strips | 1 each |
 
-The `*_servo` files are the servos themselves (the 9 g size: MG90S / SG90), there for reference – don't print them.
+The servos themselves (the 9 g size: MG90S / SG90) are in `hardware/assembly_parts/servos_reference/`, only to show where they sit – don't print them.
 
 ![Oreo, assembled](docs/img/cad_oreo_iso_front.png)
 
