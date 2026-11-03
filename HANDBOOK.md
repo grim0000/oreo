@@ -23,7 +23,7 @@ small speaker, and sees with the camera plus a single-beam time-of-flight sensor
 
 | Qty | Part | Notes |
 |---|---|---|
-| 1 | ESP32-S3 WROOM CAM board, **N16R8** (16 MB flash, 8 MB PSRAM) | with OV2640 camera and microSD slot (Freenove-style pinout) |
+| 1 | ESP32-S3 WROOM CAM board, **N16R8** (16 MB flash, 8 MB PSRAM) | with OV3660 camera (3 MP) and microSD slot (Freenove-style pinout) |
 | 1 | 2.0" IPS display, ST7789, 240×320, SPI | the face |
 | 1 | PCA9685 16-channel servo board | I2C 0x40 |
 | 10 | MG90S micro servos (metal gear, 180°) | 8 legs + head pan + head tilt |

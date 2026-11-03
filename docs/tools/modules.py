@@ -193,7 +193,7 @@ def esp32s3(x, y):
     g.circle(13, 39.1, 3.2, "#0d0e12", "#5b606b", 0.35)
     g.circle(13, 39.1, 1.6, "#1d2a44")
     g.circle(12.3, 38.4, 0.45, "#7d8aa8")
-    g.text(13, 45.2, "OV2640", 1.15, "#c8cbd2", bold=False)
+    g.text(13, 45.2, "OV3660", 1.15, "#c8cbd2", bold=False)
     # buttons either side of the camera, labels under them
     for bx, nm in ((6.2, "BOOT"), (19.8, "RST")):
         g.rect(bx - 1.8, 44.6, 3.6, 2.8, "#d9d9d9", "#9a9a9a", 0.2, 0.3)
