@@ -20,7 +20,7 @@ STEPS = {
     "2": ("Hip servos into the body", "Four MG90S servos drop into the corner pockets of the middle block, shafts up. Route the cables to the centre."),
     "3": ("Battery and bottom cover", "The 2S 1000 mAh LiPo goes into the bay under the deck, leads up through the deck. Clip the bottom cover over it."),
     "4": ("Power and servo boards on the deck", "Right side: the USB-C charger at the back (its port in the slot of the back wall), the HW-391 BMS in front of it. Left side: the PCA9685 at the back, the MP1584 5 V buck in front of it."),
-    "5": ("Parts under the roof", "Shell upside down: XL4015 flat under the middle of the roof, MPU6050 beside it (flat and square), mini rocker into the back-slope window, OLED behind the front window."),
+    "5": ("Parts under the roof", "Shell upside down: XL4015 flat under the middle of the roof, MPU6050 beside it (flat and square), mini rocker into the back-slope window, OLED behind the front window. Then the foam tape (orange)."),
     "6": ("Close the chest", "Lower the top shell (with the step 5 parts) onto the body. The charger's USB-C must line up with the slot in the back wall."),
     "7": ("Attach the legs", "Press each leg onto its hip-servo horn. Wait for calibration before tightening the horn screws."),
     "8": ("Build the neck", "Pan servo into the neck base, then the pan bracket, the tilt servo and the tilt plate the head mounts on."),
@@ -28,6 +28,14 @@ STEPS = {
     "10": ("Board, sound, back cover", "ESP32-S3 board upright behind the display, USB-C ports down through the floor slots. Speaker in the left-wall opening, amp in the right-wall pocket, touch pad under the crown. Then the back cover."),
     "11": ("Done", "Head onto the tilt plate, cables through the hole behind the neck. Switch on, join the Oreo WiFi, open /servomap then /calibrate."),
 }
+
+# Extra warnings under a page's note, drawn in a band with a warning sign.
+WARN = {
+    "5": "Stick a layer of double-sided foam tape (orange) over the parts side of the XL4015 and the MPU6050 - covering "
+         "the capacitors and coil too - and on the back of the OLED. When the chest is closed they sit right above the "
+         "BMS, the charger and the boards on the deck; the tape keeps bare pins and solder from touching them.",
+}
+ORANGE = (232, 137, 28)
 
 
 def font(size, bold=False):
@@ -71,7 +79,8 @@ def page(step):
     meta = json.load(open(os.path.join(IMG, "step_%s.json" % step)))
     W, H = src.size
     M = 380  # side margins for the callouts
-    P = Image.new("RGB", (W + 2 * M, H + 260), "white")
+    warn = WARN.get(step)
+    P = Image.new("RGB", (W + 2 * M, H + 260 + (130 if warn else 0)), "white")
     P.paste(src, (M, 150))
     d = ImageDraw.Draw(P)
     title, note = STEPS[step]
@@ -110,10 +119,18 @@ def page(step):
             d.ellipse([x - 6, y - 6, x + 6, y + 6], fill=INK)
     # the note
     nf = font(30)
-    y = P.height - 100
+    y = P.height - 100 - (130 if warn else 0)
     d.line([(60, y - 20), (P.width - 60, y - 20)], fill=(210, 210, 214), width=2)
     for i, line in enumerate(wrap(note, nf, P.width - 120, d)[:2]):
         d.text((60, y + i * 38), line, font=nf, fill=INK)
+    if warn:  # the warning band: orange bar, a warning triangle, up to three lines
+        top = P.height - 145
+        d.rectangle([60, top, P.width - 60, top + 120], fill=(253, 241, 225), outline=ORANGE, width=3)
+        d.polygon([(110, top + 32), (80, top + 86), (140, top + 86)], fill=ORANGE)
+        d.text((104, top + 44), "!", font=font(34, True), fill="white")
+        wf = font(28)
+        for i, line in enumerate(wrap(warn, wf, P.width - 280, d)[:4]):
+            d.text((170, top + 26 + i * 34), line, font=wf, fill=INK)
     P.save(os.path.join(IMG, "page_%s.png" % step), optimize=True)
 
 

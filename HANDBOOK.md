@@ -119,6 +119,11 @@ Where things sit (left/right as the robot sees it, its face is the front):
 * **Chest, under the roof:** the XL4015 flat in the middle, the MPU6050 beside it (mount it flat and square – it is
   the robot's sense of level), the mini rocker switch in the window of the back slope, the OLED behind the window of
   the front face. The round hole in the roof behind the neck is the cable way to the head.
+* **Insulate the roof parts:** put a layer of double-sided foam tape over the parts side of the XL4015 (over the
+  capacitors and the coil too, so nothing sticks out past it) and of the MPU6050, and on the back of the OLED – the
+  orange pads in step 5. When the chest is closed these sit right above the BMS, the charger and the boards on the
+  deck; the tape stops bare pins and solder joints from touching them and shorting. (It also holds the MPU6050 still,
+  which helps its readings.)
 * **Head:** the head is a front body (face, side walls, floor) closed by an L-shaped back cover (back + roof).
   The display sits landscape in the face; the camera looks out of the forehead hole with the ToF sensor on its
   left and the mic on its right. The ESP32-S3 board stands upright right behind the display, its two USB-C ports

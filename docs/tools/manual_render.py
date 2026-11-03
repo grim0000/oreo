@@ -67,6 +67,29 @@ def mat(tone):
     return m
 
 
+def tape_mat():
+    """Double-sided foam tape: the one coloured thing in the drawings (light orange)."""
+    if "tape" in bpy.data.materials:
+        return bpy.data.materials["tape"]
+    m = bpy.data.materials.new("tape")
+    m.use_nodes = True
+    nt = m.node_tree
+    for n in list(nt.nodes):
+        nt.nodes.remove(n)
+    em = nt.nodes.new("ShaderNodeEmission")
+    em.inputs[0].default_value = (0.98, 0.62, 0.22, 1)
+    out = nt.nodes.new("ShaderNodeOutputMaterial")
+    nt.links.new(em.outputs[0], out.inputs[0])
+    return m
+
+
+def tape(name, c, size, parent):
+    """A pad of double-sided foam tape (mm), stuck to a board."""
+    o = cube(name, c, size, 1.0, parent)
+    o.data.materials[0] = tape_mat()
+    return o
+
+
 def load(name, tone=1.0):
     path = os.path.join(PARTS, name + ".stl")
     if not os.path.exists(path):  # the servos (reference models, not printed) are in their own folder
@@ -209,7 +232,7 @@ def electronics_chest():
     return e
 
 
-def electronics_roof():
+def electronics_roof(with_tape=False):
     """Under the roof: XL4015 in the middle, MPU6050 beside it (both hang under the roof, parts facing down);
     the mini rocker in the back-slope window, the OLED behind the front-face window."""
     e = {}
@@ -228,6 +251,16 @@ def electronics_roof():
     e["oled"] = cube("oled", (45.6, 0, 74.4), (27, 27, 1.6), GREY["pcb"])
     decal("oled_art", "oled", (45.6, 0, 75.25), (0, 1, 0), (-1, 0, 0), 27, 27, e["oled"])
     tilt(e["oled"], 69.7)
+    if with_tape:  # a layer of double-sided foam tape over the side of each that faces down into the chest,
+        # so nothing bare touches the BMS / charger / boards on the deck when the chest is closed
+        tape("xl4015_tape", (-1.5, -7, 71.0), (54, 23, 1.6), e["xl4015"])        # over the caps and coil: nothing sticks out
+        tape("imu_tape", (2, 16, 81.6), (18, 13.5, 1.2), e["imu"])
+        bpy.context.view_layer.update()
+        o = e["oled"]  # its back (away from the screen), in the board's own frame
+        t = tape("oled_tape", (45.6, 0, 74.4), (27, 27, 2.0), None)
+        t.parent = o
+        t.matrix_parent_inverse.identity()
+        t.location = (0, 0, -0.0018)
     return e
 
 
@@ -399,11 +432,11 @@ def main():
     if want("5"):
         reset()
         ts = load("top_shell")
-        er = electronics_roof()
+        er = electronics_roof(with_tape=True)
         keep = [ts] + list(er.values())
         render("5", keep, {er["xl4015"]: "XL4015 buck (servo power)", er["imu"]: "MPU6050", er["switch"]: "mini rocker switch",
-                           er["oled"]: "0.96\" OLED"},
-               [(er["xl4015"], (0, 0, -60)), (er["imu"], (0, 0, -60)), (er["switch"], (24, 0, -24)), (er["oled"], (-34, 0, -13))],
+                           er["oled"]: "0.96\" OLED (tape on the back)"},
+               [(er["xl4015"], (0, 0, -60)), (er["imu"], (30, 40, -40)), (er["switch"], (24, 0, -24)), (er["oled"], (-34, 0, -13))],
                view=(0.9, -1, -0.9))
     # 6 - the top shell onto the body
     if want("6"):
