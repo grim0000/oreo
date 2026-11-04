@@ -205,7 +205,7 @@
    0.0357,
    0.202
   ],
-  "triangles": 2838
+  "triangles": 2834
  },
  "head_shell": {
   "min": [
@@ -218,7 +218,7 @@
    0.0357,
    0.204
   ],
-  "triangles": 5518
+  "triangles": 3718
  },
  "head_side_plate": {
   "min": [
@@ -314,15 +314,15 @@
  "neck_pan_bracket": {
   "min": [
    -0.0217,
-   -0.0181,
+   -0.018,
    0.0997
   ],
   "max": [
-   0.0269,
+   0.0264,
    0.02,
-   0.141
+   0.1407
   ],
-  "triangles": 2218
+  "triangles": 1838
  },
  "neck_tilt_plate": {
   "min": [
@@ -387,7 +387,7 @@
    0.0299,
    0.0855
   ],
-  "triangles": 1964
+  "triangles": 1736
  },
  "chest_strips_right": {
   "min": [
